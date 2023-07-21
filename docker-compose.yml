@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: perpustakaan_lenu
+    ports:
+      - 5433:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  api:
+    depends_on:
+      - db
+    image: rubenadi/perpustakaan-lenu:v5
+    restart: always
+    environment:
+      - PORT=3000
+      - DB_URL="postgresql://postgres:secret@localhost:5433/perpustakaan_lenu?sslmode=disable"
+    ports:
+      - 3000:3000
+  
